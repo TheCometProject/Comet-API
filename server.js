@@ -1,33 +1,27 @@
 // imports
 const express = require("express")
-const { createServer } = require("https")
+const { createServer } = require("http")
 const { Server } = require("socket.io")
 const { v4: uuidV4 } = require('uuid')
 const { ExpressPeerServer } = require("peer")
 const { readFileSync } = require("fs")
 
-// const { config } = require("dotenv")
-// config()
-
-const sslOptions = {
-  key: readFileSync("./ssl/key.pem"),
-  cert: readFileSync("./ssl/cert.pem")
-}
+const { config } = require("dotenv")
+config()
 
 // initialize http and socket.io servers:
 const app = express()
-const httpServer = createServer(sslOptions, app)
+const httpServer = createServer(app)
 const io = new Server(httpServer)
-const port = process.env.PORT || 3000
+const port = process.env.PORT
 
 // initialize the peer server and use it as middleware:
 const peerApp = express()
-const peerServer = createServer(sslOptions, peerApp)
-const peerPort = process.env.PEER_PORT || 3001
+const peerServer = createServer(peerApp)
+const peerPort = process.env.PEER_PORT
 peerApp.use('/', ExpressPeerServer(peerServer, { 
   debug: true,
   path: '/',
-  ssl: sslOptions
 }))
 
 app.set('view engine', 'ejs')
