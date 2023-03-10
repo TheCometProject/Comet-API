@@ -4,10 +4,6 @@ const { createServer } = require("http")
 const { Server } = require("socket.io")
 const { v4: uuidV4 } = require('uuid')
 const { ExpressPeerServer } = require("peer")
-const { readFileSync } = require("fs")
-
-const { config } = require("dotenv")
-config()
 
 // initialize http and socket.io servers:
 const app = express()
