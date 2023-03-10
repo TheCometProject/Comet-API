@@ -6,8 +6,9 @@ const { v4: uuidV4 } = require('uuid')
 const { ExpressPeerServer } = require("peer")
 const { readFileSync } = require("fs")
 
-// const { config } = require("dotenv")
-// config()
+if (process.env.NODE_ENV !== 'production') {
+  require("dotenv").config()
+}
 
 const sslOptions = {
   key: readFileSync("./ssl/key.pem"),
