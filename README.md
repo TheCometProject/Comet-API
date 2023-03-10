@@ -1,6 +1,8 @@
-# Generate SSL Certificate (for local testing)
-`openssl req -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 365`
-`openssl rsa -in keytmp.pem -out key.pem`
+# Build (install dependencies)
+`yarn`
+
+# Run
+`yarn start`
 
 # Git / GitHub Contribution Guide:
 1. Open up a console and change the current directory to wherever you want to clone the repository.
