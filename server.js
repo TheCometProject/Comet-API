@@ -4,11 +4,15 @@ const { createServer } = require("http")
 const { Server } = require("socket.io")
 const { v4: uuidV4 } = require('uuid')
 
+if (process.env.NODE_ENV === 'production') {
+  require('dotenv').config()
+}
+
 // initialize http and socket.io servers:
 const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer)
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 10000
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
