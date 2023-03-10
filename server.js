@@ -3,7 +3,6 @@ const express = require("express")
 const { createServer } = require("http")
 const { Server } = require("socket.io")
 const { v4: uuidV4 } = require('uuid')
-// const { ExpressPeerServer } = require("peer")
 
 console.log(`PORT=${process.env.PORT}`)
 console.log(`RENDER_EXTERNAL_URL=${process.env.RENDER_EXTERNAL_URL}`)
@@ -13,16 +12,7 @@ console.log(`RENDER_EXTERNAL_HOSTNAME=${process.env.RENDER_EXTERNAL_HOSTNAME}`)
 const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer)
-const port = process.env.PORT
-
-// initialize the peer server and use it as middleware:
-// const peerApp = express()
-// const peerServer = createServer(peerApp)
-// const peerPort = process.env.PEER_PORT
-// peerApp.use('/', ExpressPeerServer(peerServer, { 
-//   debug: true,
-//   path: '/',
-// }))
+const port = process.env.PORT || 3000
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
