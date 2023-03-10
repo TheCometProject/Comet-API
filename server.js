@@ -4,10 +4,6 @@ const { createServer } = require("http")
 const { Server } = require("socket.io")
 const { v4: uuidV4 } = require('uuid')
 
-console.log(`PORT=${process.env.PORT}`)
-console.log(`RENDER_EXTERNAL_URL=${process.env.RENDER_EXTERNAL_URL}`)
-console.log(`RENDER_EXTERNAL_HOSTNAME=${process.env.RENDER_EXTERNAL_HOSTNAME}`)
-
 // initialize http and socket.io servers:
 const app = express()
 const httpServer = createServer(app)
@@ -37,4 +33,3 @@ io.on('connection', socket => {
 })
 
 httpServer.listen(port)
-// peerServer.listen(peerPort)
