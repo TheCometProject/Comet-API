@@ -19,7 +19,7 @@ const getLocalIp = () => {
 
 module.exports = {
   listenIp: '0.0.0.0',
-  listenPort: 3016,
+  listenPort: process.env.PORT || 3000,
 
   mediasoup: {
     // Worker settings
