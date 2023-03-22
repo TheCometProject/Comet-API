@@ -66,7 +66,7 @@ module.exports = {
       listenIps: [
         {
           ip: '0.0.0.0',
-          announcedIp: '216.24.57.253'
+          announcedIp: 'comet-api-testing.onrender.com'
           // announcedIp: getLocalIp() // replace by public IP address
         }
       ],
