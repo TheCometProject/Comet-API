@@ -1,38 +1,23 @@
-# Generate SSL Certificate (for local testing)
-`openssl req -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 365`
-`openssl rsa -in keytmp.pem -out key.pem`
+# Mediasoup video conferencing
 
-# Git / GitHub Contribution Guide:
-1. Open up a console and change the current directory to wherever you want to clone the repository.
-2. Clone the repository:
-    ```sh
-    git clone https://github.com/TheCometProject/Back-End.git
-    ```
-    - You might be asked to enter your GitHub username and password (or PAT).
-3. Create your personal branch: (check Notes on naming conventions)
-    ```sh
-    git checkout -b yourBranchName
-    ```
-3. Make your modifications and commit your changes.
-4. Push your changes to the remote repository *in your personal branch*: 
-    ```sh
-    git push origin yourBranchName
-    ```
-5. Make a Pull Request to the `main` branch to pull your changes.
-6. Once your PR is merged, switch back to the `main` branch, delete your old branch (both on GitHub and locally) and pull the new changes to your local `main` branch:
-    ```sh
-    git branch main
-    git branch -d yourBranchName
-    git pull origin main
-    ```
-7. If you want to make more changes, repeat from step 3.
+Example website for multi-party video/audio/screen conferencing using mediasoup. This project is intended to better understand how mediasoup works with a simple example.
 
+This project is featured on the [mediasoup examples page](https://mediasoup.org/documentation/examples/) with many other examples. Checkout mediasoup at [mediasoup.org](https://mediasoup.org)
 
-## Notes
-- ***NEVER PUSH TO THE `main` BRANCH.***
-- When you make a PR, **you have to wait for other people to review your changes before merging to the `main` branch.**
-- You don't reuse branches that have already been merged, that's why you delete them after your PR is merged.
-- Your branch name should be like this: 
-    - `YourName/feature_XYZ`
-    - `YourName/bugfix-34`
-- You must create a branch for every feature or bug fix you create.
+# Running the code
+
+-   run `npm install` then `npm start` to run the application. Then open your browser at `https://localhost:3016` or your own defined port/url in the config file.
+-   (optional) edit the `src/config.js` file according to your needs and replace the `ssl/key.pem ssl/cert.pem` certificates with your own.
+
+# Deployment
+
+-   in `config.js` replace the `announcedIP` with your public ip address of the server and modify the port you want to serve it in.
+-   add firewall rules of the port of the webpage (default 3016) and the rtc connections (default udp 10000-10100) for the machine.
+
+# Pull Requests
+
+-   Please run `npx prettier --write .` before to make a PR.
+
+notes : Best to run the project on a linux system as the mediasoup installation could have issues by installing on windows. If you have a windows system consider installing WSL to be able to run it.
+
+[installing wsl on windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
