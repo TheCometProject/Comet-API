@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const validator = require("validator");
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
@@ -12,6 +13,16 @@ router.post("/register", async (req, res) => {
             return res
                 .status(400)
                 .json({ error: "Please provide all required fields" });
+        }
+
+        // Validate email address
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({ error: "Invalid email address" });
+        }
+
+        // Validate password strength
+        if (!validator.isStrongPassword(password)) {
+            return res.status(400).json({ error: "Weak password" });
         }
 
         // Check if user already exists
