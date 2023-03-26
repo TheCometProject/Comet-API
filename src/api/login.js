@@ -33,7 +33,7 @@ router.post("/login", limiter, async (req, res) => {
 
         return res.status(200).json({ message: "Welcome Back!", token: token });
     } catch (err) {
-        console.error(err.message);
+        logger.error(err);
         return res.status(500).json({ message: "Server Error" });
     }
 });
