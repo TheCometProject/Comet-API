@@ -1,6 +1,6 @@
 const express = require("express");
 const User = require("../models/user");
-const bcrypt = require("bcrypt");
+const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 const router = express.Router();
@@ -23,7 +23,7 @@ router.post("/login", limiter, async (req, res) => {
             return res.status(400).json({ message: "Email or password is incorrect." });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await argon2.verify(user.password, password);
 
         if (!isMatch) {
             return res.status(400).json({ message: "Email or password is incorrect." });
@@ -60,7 +60,7 @@ router.post("/token", async (req, res) => {
         const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '15m' });
         return res.status(200).json({ accessToken });
     } catch (err) {
-        console.error(err);
+        logger.error(err);
         return res.status(401).json({ message: "Unauthorized" });
     }
 });
