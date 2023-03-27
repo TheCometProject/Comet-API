@@ -1,35 +1,52 @@
 const express = require("express");
 const User = require("../models/user");
+const argon2 = require("argon2");
+const { check, validationResult } = require("express-validator");
 const router = express.Router();
 
-router.post("/register", async (req, res) => {
+router.post(
+    "/register",
+    [
+        check("fullName").notEmpty().withMessage("Full name is required"),
+        check("email")
+            .notEmpty()
+            .withMessage("Email is required")
+            .isEmail()
+            .withMessage("Invalid email address"),
+        check("password")
+            .notEmpty()
+            .withMessage("Password is required")
+            .isStrongPassword()
+            .withMessage("Weak password"),
+    ],
+    async (req, res) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+            }
 
-    try {
+            const { fullName, email, password } = req.body;
 
-        const { fullName, email, password } = req.body;
+            // Check if user already exists
+            const existingUser = await User.findOne({ email }, { _id: 0, email: 1 });
+            if (existingUser) {
+                return res.status(409).json({ error: "User already exists" });
+            }
 
-        const alreadyExistsUser = await User.findOne({ email }).catch((err) => {
-            console.log("Error: ", err);
-        });
+            // Hash password
+            const hashedPassword = await argon2.hash(password, { timeCost: 4, memoryCost: 2 ** 16, parallelism: 2 });
 
-        if (alreadyExistsUser) {
-            return res.status(409).json({ message: "User with email already exists!" });
+            // Create new user
+            const newUser = new User({ fullName, email, password: hashedPassword });
+            await newUser.save();
+
+            res.json({ message: "Thank you for your registration!" });
+        } catch (error) {
+            logger.error(error);
+            res.status(500).json({ error: "Cannot register user at the moment" });
         }
-
-        const newUser = new User({ fullName, email, password });
-        const savedUser = await newUser.save().catch((err) => {
-            console.log("Error :", err);
-            res.status(500).json({ error: "Cannot register user at the moment!" });
-        });
-
-        if (savedUser) {
-            res.json({ message: "Thank you for your registration !" });
-        }
-    } catch (err) {
-        res.json("Error : ", err.message);
     }
-
-});
-
+);
 
 module.exports = router;
