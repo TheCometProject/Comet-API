@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const argon2 = require("argon2");
 
 // Creating the user schema 
 
@@ -14,6 +15,10 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    },
+    refreshToken: {
+        type: String,
+        default: null,
     },
 });
 
