@@ -42,27 +42,5 @@ router.post("/login", limiter, async (req, res) => {
     }
 });
 
-router.post("/token", async (req, res) => {
-    const refreshToken = req.body.token;
-
-    if (!refreshToken) {
-        return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    try {
-        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-        const user = await User.findOne({ _id: decoded.id });
-
-        if (!user || user.refreshToken !== refreshToken) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
-        const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '15m' });
-        return res.status(200).json({ accessToken });
-    } catch (err) {
-        logger.error(err);
-        return res.status(401).json({ message: "Unauthorized" });
-    }
-});
 
 module.exports = router;
