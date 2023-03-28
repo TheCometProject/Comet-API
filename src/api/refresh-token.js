@@ -3,15 +3,21 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-router.post('/refresh-token', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.post('/refresh-token', async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid user' });
+        const { refreshToken } = req.body;
+        if (!refreshToken) {
+            return res.status(401).json({ message: 'Refresh token missing' });
         }
 
-        const newAccessToken = jwt.sign({ sub: user.id }, process.env.JWT_SECRET, { expiresIn: '15m' });
-        const newRefreshToken = jwt.sign({ sub: user.id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+        const decoded = jwt.verify(refreshToken, `${process.env.JWT_REFRESH_SECRET}`);
+        const user = await User.findById(decoded.id);
+        if (!user || user.refreshToken !== refreshToken) {
+            return res.status(401).json({ message: 'Invalid refresh token' });
+        }
+
+        const newAccessToken = jwt.sign({ id: user.id }, `${process.env.JWT_SECRET}`, { expiresIn: '15m' });
+        const newRefreshToken = jwt.sign({ id: user.id }, `${process.env.JWT_REFRESH_SECRET}`, { expiresIn: '7d' });
         user.refreshToken = newRefreshToken;
         await user.save();
 
