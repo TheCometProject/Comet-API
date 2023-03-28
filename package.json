@@ -11,6 +11,7 @@
   "keywords": [],
   "author": "not1cyyy",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "argon2": "^0.30.3",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
@@ -26,6 +27,7 @@
     "nodemailer-sendinblue-transport": "^2.0.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
+    "sib-api-v3-sdk": "^8.5.0",
     "uuid": "^9.0.0",
     "validator": "^13.9.0"
   },
