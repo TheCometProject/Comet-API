@@ -29,8 +29,8 @@ router.post("/login", limiter, async (req, res) => {
             return res.status(400).json({ message: "Email or password is incorrect." });
         }
 
-        const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '15m' });
-        const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+        const accessToken = jwt.sign({ id: user.id }, `${process.env.JWT_SECRET}`, { expiresIn: '15m' });
+        const refreshToken = jwt.sign({ id: user.id }, `${process.env.JWT_REFRESH_SECRET}`, { expiresIn: '7d' });
 
         user.refreshToken = refreshToken;
         await user.save();
@@ -41,6 +41,5 @@ router.post("/login", limiter, async (req, res) => {
         return res.status(500).json({ message: "Server Error" });
     }
 });
-
 
 module.exports = router;
