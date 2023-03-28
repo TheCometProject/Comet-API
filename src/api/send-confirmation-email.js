@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const nodeMailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const User = require('../models/user');
+const SibApiV3Sdk = require('sib-api-v3-sdk');
+const defaultClient = SibApiV3Sdk.ApiClient.instance;
+const apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = `${process.env.SENDINBLUE_API_KEY}`;
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
 router.post('/send-confirmation-email', async (req, res) => {
 
@@ -15,30 +19,19 @@ router.post('/send-confirmation-email', async (req, res) => {
     await User.findOneAndUpdate({ email: email }, { confirmationToken: confirmationToken });
 
     // send confirmation email
-    const sendinBlueTransport = require('nodemailer-sendinblue-transport');
-
-    const transporter = nodeMailer.createTransport(
-        sendinBlueTransport({
-            apiKey: `${process.env.SENDINBLUE_API_KEY}`,
-        })
-    );
+    const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+    sendSmtpEmail.subject = 'Confirm your email';
+    sendSmtpEmail.sender = { name: 'The Comet Project', email: 'thecometproject0@gmail.com' };
+    sendSmtpEmail.to = [{ email: email }];
+    sendSmtpEmail.textContent = 'Please click on the following link to confirm your email: http://localhost:5000/api/v1/confirm-email/' + confirmationToken;
 
 
-    const mailOptions = {
-        from: 'The Comet Project <thecometproject0@gmail.com>',
-        to: email,
-        subject: 'Confirm your email',
-        text: 'Please click on the following link to confirm your email: http://localhost:3000/confirm-email/' + confirmationToken,
-    };
-
-    transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send('Error sending confirmation email');
-        } else {
-            console.log('Confirmation email sent: ' + info.response);
-            res.status(200).send('Confirmation email sent');
-        }
+    apiInstance.sendTransacEmail(sendSmtpEmail).then(() => {
+        console.log('Confirmation email sent');
+        res.status(200).send('Confirmation email sent');
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).send('Error sending confirmation email');
     });
 });
 
