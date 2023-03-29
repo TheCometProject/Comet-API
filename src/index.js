@@ -1,7 +1,7 @@
+if (process.env.NODE_ENV !== 'production') require('dotenv').config();
+
 const app = require('./app');
 const mongoose = require('mongoose');
-
-if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
 const connect = async () => {
   await mongoose.connect(process.env.MONGODB_URI);
