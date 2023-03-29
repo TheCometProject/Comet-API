@@ -2,51 +2,55 @@ const express = require("express");
 const User = require("../models/user");
 const argon2 = require("argon2");
 const { check, validationResult } = require("express-validator");
+const { createError } = require("../utils/error")
 const router = express.Router();
 
 router.post(
-    "/register",
-    [
-        check("fullName").notEmpty().withMessage("Full name is required"),
-        check("email")
-            .notEmpty()
-            .withMessage("Email is required")
-            .isEmail()
-            .withMessage("Invalid email address"),
-        check("password")
-            .notEmpty()
-            .withMessage("Password is required")
-            .isStrongPassword()
-            .withMessage("Weak password"),
-    ],
-    async (req, res) => {
-        try {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                return res.status(400).json({ errors: errors.array() });
-            }
+  "/register",
+  [
+    check("fullName").notEmpty().withMessage("Full name is required"),
+    check("email")
+      .notEmpty()
+      .withMessage("Email is required")
+      .isEmail()
+      .withMessage("Invalid email address"),
+    check("password")
+      .notEmpty()
+      .withMessage("Password is required")
+      .isStrongPassword()
+      .withMessage("Weak password"),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(createError(400, errors.array()))
+      }
 
-            const { fullName, email, password } = req.body;
+      const { fullName, email, password } = req.body;
 
-            // Check if user already exists
-            const existingUser = await User.findOne({ email }, { _id: 0, email: 1 });
-            if (existingUser) {
-                return res.status(409).json({ error: "User already exists" });
-            }
+      // Check if user already exists
+      const existingUser = await User.findOne({ email }, { _id: 0, email: 1 });
+      if (existingUser) {
+        return next(createError(409, "User already exists"))
+      }
 
-            // Hash password
-            const hashedPassword = await argon2.hash(password, { timeCost: 4, memoryCost: 2 ** 16, parallelism: 2 });
+      // Hash password
+      const hashedPassword = await argon2.hash(password, {
+        timeCost: 4,
+        memoryCost: 2 ** 16,
+        parallelism: 2,
+      });
 
-            // Create new user
-            const newUser = new User({ fullName, email, password: hashedPassword });
-            await newUser.save();
+      // Create new user
+      const newUser = new User({ fullName, email, password: hashedPassword });
+      await newUser.save();
 
-            res.json({ message: "Thank you for your registration!" });
-        } catch (error) {
-            logger.error(error);
-            res.status(500).json({ error: "Cannot register user at the moment" });
-        }
+      res.json({ message: "Thank you for your registration!" });
+    } catch (error) {
+      return next(createError(500, "Cannot register user at the moment"))
     }
+  }
 );
 
 module.exports = router;
