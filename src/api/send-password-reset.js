@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const { body } = require('express-validator');
 const { sendEmail } = require('../utils/email');
 
-router.post('/forgot-password', body('email').isEmail().withMessage('Invalid email address'), async (req, res) => {
+router.post('/forgot-password', body('email').isEmail().withMessage('Invalid email address'), async (req, res, next) => {
 
     try {
 
@@ -13,7 +13,7 @@ router.post('/forgot-password', body('email').isEmail().withMessage('Invalid ema
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return next(createError(404, "User not found"));
         }
 
         const token = uuidv4();
@@ -37,7 +37,7 @@ router.post('/forgot-password', body('email').isEmail().withMessage('Invalid ema
     } catch (error) {
 
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        return next(createError(500, "Internal server error"));
 
     }
 

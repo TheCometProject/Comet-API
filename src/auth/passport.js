@@ -10,14 +10,18 @@ const jwtOptions = {
 
 const jwtStrategy = new JwtStrategy(jwtOptions, async (payload, done) => {
     try {
+
         const user = await User.findById(payload.id);
         if (!user) {
             return done(null, false);
         }
 
         done(null, user);
+
     } catch (err) {
+
         done(err, false);
+
     }
 });
 
