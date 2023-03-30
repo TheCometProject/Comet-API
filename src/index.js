@@ -7,12 +7,12 @@ const mongoose = require('mongoose');
 
 const connect = async () => {
 
-    await mongoose.connect(`${process.env.MONGODB_URI}`);
+    await mongoose.connect(`${process.env.MONGODB_URI}`, { useNewUrlParser: true, useUnifiedTopology: true });
     console.log("Connected to MongoDB");
 
 }
 
-const port = `${process.env.PORT}` || 4000;
+const port = process.env.PORT || 4000;
 app.listen(port, async () => {
 
     // mongoose will attempt to reconnect if an error occurs after the initial connection is established
