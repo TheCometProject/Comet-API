@@ -7,7 +7,7 @@ router.get(
     "/alger",
     passport.authenticate("jwt", { session: false }),
     (req, res) => {
-        res.send("Welcome to Alger");
+        res.json("Welcome to Alger");
     }
 );
 
