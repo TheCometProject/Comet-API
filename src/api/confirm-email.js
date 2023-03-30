@@ -2,22 +2,22 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 
-router.get('/confirm-email/:confirmationToken', async (req, res) => {
+router.get('/confirm-email/:confirmationToken', async (req, res, next) => {
 
-      const { confirmationToken } = req.params;
+    const { confirmationToken } = req.params;
 
-      // find user with matching confirmation token
-      const user = await User.findOne({ confirmationToken: confirmationToken });
+    // find user with matching confirmation token
+    const user = await User.findOne({ confirmationToken: confirmationToken });
 
-      if (!user) {
-            return res.status(400).send('Invalid confirmation token');
-      }
+    if (!user) {
+        return next(createError(400, "Invalid confirmation token"));
+    }
 
-      user.confirmationToken = undefined;
-      user.isEmailConfirmed = true;
-      await user.save();
+    user.confirmationToken = undefined;
+    user.isEmailConfirmed = true;
+    await user.save();
 
-      res.status(200).send('Email confirmed successfully');
+    res.status(200).send('Email confirmed successfully');
 
 });
 

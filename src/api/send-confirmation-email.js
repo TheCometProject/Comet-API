@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const User = require('../models/user');
 const { sendEmail } = require('../utils/email');
 
-router.post('/send-confirmation-email', async (req, res) => {
+router.post('/send-confirmation-email', async (req, res, next) => {
 
     try {
 
@@ -29,7 +29,7 @@ router.post('/send-confirmation-email', async (req, res) => {
 
     } catch (error) {
 
-        res.status(500).send('Internal server error');
+        return next(createError(500, "Internal server error"));
 
     }
 });
