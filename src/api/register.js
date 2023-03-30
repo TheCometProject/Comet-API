@@ -2,7 +2,8 @@ const express = require("express");
 const User = require("../models/user");
 const argon2 = require("argon2");
 const { check, validationResult } = require("express-validator");
-const { createError } = require("../utils/error")
+const { createError } = require("../utils/error");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 router.post(
@@ -21,6 +22,7 @@ router.post(
             .withMessage("Weak password"),
     ],
     async (req, res, next) => {
+
         try {
 
             const errors = validationResult(req);
@@ -45,12 +47,25 @@ router.post(
 
             // Create new user
             const newUser = new User({ fullName, email, password: hashedPassword });
+
+            // Generate access token and refresh token
+            const accessToken = jwt.sign({ id: newUser.id }, `${process.env.JWT_SECRET}`, {
+                expiresIn: "15m",
+            });
+            const refreshToken = jwt.sign(
+                { id: newUser.id },
+                `${process.env.JWT_REFRESH_SECRET}`,
+                { expiresIn: "7d" }
+            );
+
+            newUser.refreshToken = refreshToken;
             await newUser.save();
 
-            res.json({ message: "Thank you for your registration!" });
+            res.status(200).json({ message: "Thank you for your registration!", fullName: newUser.fullName, accessToken, refreshToken });
 
         } catch (error) {
 
+            console.log(error);
             return next(createError(500, "Cannot register user at the moment"));
 
         }
