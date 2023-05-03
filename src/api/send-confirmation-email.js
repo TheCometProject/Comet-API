@@ -21,7 +21,7 @@ router.post('/send-confirmation-email', async (req, res, next) => {
         const senderEmail = 'thecometproject0@gmail.com';
         const subject = 'Confirm your email';
         const to = email;
-        const textContent = 'Please click on the following link to confirm your email: http://localhost:5000/api/v1/confirm-email/' + confirmationToken;
+        const textContent = 'Please click on the following link to confirm your email: http://localhost:4000/api/v1/confirm-email/' + confirmationToken;
 
         await sendEmail(senderName, senderEmail, to, subject, textContent);
 

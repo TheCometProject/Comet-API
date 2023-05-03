@@ -28,7 +28,7 @@ router.post('/forgot-password', body('email').isEmail().withMessage('Invalid ema
         const senderEmail = 'thecometproject0@gmail.com';
         const subject = 'Reset Password';
         const to = email;
-        const textContent = 'Please click on the following link to reset your password: http://localhost:5000/api/v1/reset-password/' + token;
+        const textContent = 'Please click on the following link to reset your password: http://localhost:4000/api/v1/reset-password/' + token;
 
         await sendEmail(senderName, senderEmail, to, subject, textContent);
 
