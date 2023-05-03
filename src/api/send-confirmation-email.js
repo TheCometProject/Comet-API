@@ -3,6 +3,8 @@ const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const User = require('../models/user');
 const { sendEmail } = require('../utils/email');
+const { createError } = require("../utils/error");
+
 
 router.post('/send-confirmation-email', async (req, res, next) => {
 

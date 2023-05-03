@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const { createError } = require("../utils/error");
+
 
 router.get('/confirm-email/:confirmationToken', async (req, res, next) => {
 
