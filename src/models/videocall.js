@@ -8,11 +8,24 @@ const videoCallSchema = new mongoose.Schema({
     }],
     start_time: {
         type: Date,
-        required: true
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value < this.end_time;
+            },
+            message: 'Start time must be before end time'
+        },
+        index: true
     },
     end_time: {
         type: Date,
-        required: true
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value > this.start_time;
+            },
+            message: 'End time must be after start time'
+        }
     },
     call_url: {
         type: String,
