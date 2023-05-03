@@ -3,6 +3,8 @@ const User = require('../models/user');
 const { v4: uuidv4 } = require('uuid');
 const { body } = require('express-validator');
 const { sendEmail } = require('../utils/email');
+const { createError } = require("../utils/error");
+
 
 router.post('/forgot-password', body('email').isEmail().withMessage('Invalid email address'), async (req, res, next) => {
 
