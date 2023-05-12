@@ -9,6 +9,7 @@ const confirmEmailAPI = require("./confirm-email");
 const refreshTokenAPI = require("./refresh-token");
 const sendPasswordResetAPI = require("./send-password-reset");
 const passwordResetAPI = require('./password-reset');
+const contactUsAPI = require('./contact-us');
 
 
 const router = express.Router();
@@ -23,6 +24,7 @@ router.use(confirmEmailAPI);
 router.use(refreshTokenAPI);
 router.use(sendPasswordResetAPI);
 router.use(passwordResetAPI);
+router.use(contactUsAPI);
 
 
 module.exports = router;
