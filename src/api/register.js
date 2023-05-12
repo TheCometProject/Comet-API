@@ -65,7 +65,6 @@ router.post(
 
         } catch (error) {
 
-            console.log(error);
             return next(createError(500, "Cannot register user at the moment"));
 
         }

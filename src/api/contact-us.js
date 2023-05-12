@@ -24,7 +24,6 @@ router.post('/contact-us', async (req, res, next) => {
 
     } catch (error) {
 
-        console.error(error);
         return next(createError(500, "Internal server error"));
 
     }
