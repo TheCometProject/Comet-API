@@ -19,7 +19,7 @@ router.post('/contact-us', async (req, res, next) => {
 
         return res
             .status(200)
-            .json({ message: "Contact us email sent successfully!", name, email, subj, content });
+            .json({ message: "Contact us email sent successfully!", name, email, to, subj, content });
 
 
     } catch (error) {
