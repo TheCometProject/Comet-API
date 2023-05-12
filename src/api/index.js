@@ -10,6 +10,7 @@ const refreshTokenAPI = require("./refresh-token");
 const sendPasswordResetAPI = require("./send-password-reset");
 const passwordResetAPI = require('./password-reset');
 const contactUsAPI = require('./contact-us');
+const drawingAPI = require('./drawings');
 
 
 const router = express.Router();
@@ -25,6 +26,7 @@ router.use(refreshTokenAPI);
 router.use(sendPasswordResetAPI);
 router.use(passwordResetAPI);
 router.use(contactUsAPI);
+router.use(drawingAPI);
 
 
 module.exports = router;
