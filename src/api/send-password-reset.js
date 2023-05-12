@@ -38,7 +38,6 @@ router.post('/forgot-password', body('email').isEmail().withMessage('Invalid ema
 
     } catch (error) {
 
-        console.error(error);
         return next(createError(500, "Internal server error"));
 
     }

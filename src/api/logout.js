@@ -23,7 +23,6 @@ router.post("/logout", passport.authenticate("jwt", { session: false }), async (
 
     } catch (error) {
 
-        console.error(error);
         return next(createError(500, "Internal server Error"));
 
     }

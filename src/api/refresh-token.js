@@ -29,7 +29,6 @@ router.post('/refresh-token', async (req, res, next) => {
 
     } catch (err) {
 
-        console.error(err);
         return next(createError(500, "Internal server error"));
 
     }

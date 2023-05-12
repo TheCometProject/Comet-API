@@ -36,7 +36,6 @@ router.post('/reset-password/:token', async (req, res, next) => {
 
     } catch (error) {
 
-        console.error(error);
         return next(createError(500, "Internal server error"));
 
     }
