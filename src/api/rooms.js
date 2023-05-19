@@ -1,74 +1,66 @@
 const express = require("express");
 const router = express.Router();
-const VideoCall = require("../models/videocall");
+const Room = require("../models/room");
 const { createError } = require("../utils/error");
 
 router.post("/rooms", async (req, res, next) => {
+  try {
+    const { author, roomId } = req.body;
 
-    try {
+    const newRoom = new Room({
+      author, 
+      roomId
+    });
 
-        const { _id, participants, start_time, end_time, call_url } = req.body;
+    await newRoom.save();
 
-        const newRoom = new VideoCall({
-            //participants,
-            _id,
-            start_time,
-            end_time,
-            call_url
-        });
-
-        await newRoom.save();
-
-        res.status(201).json({ message: "Conference room created successfully", call_url, start_time, end_time, _id });
-
-    } catch (error) {
-
-        return next(createError(500, "Cannot create conference room at the moment"));
-
-    }
+    res
+      .status(201)
+      .json({
+        message: "Room created successfully",
+      });
+  } catch (error) {
+    return next(
+      createError(500, "Cannot create a room at the moment")
+    );
+  }
 });
 
-router.delete('/rooms/:id', async (req, res, next) => {
+router.delete("/rooms/:roomId", async (req, res, next) => {
+  try {
+    const roomId = req.params.roomId;
 
-    try {
+    // Find the room by its roomId and delete it
+    const room = await Room.findOneAndDelete({roomId: roomId});
 
-        const roomId = req.params.id;
-
-        // Find the room by its ID and delete it
-        const room = await VideoCall.findByIdAndDelete(roomId);
-
-        if (!room) {
-            return next(createError(404, "Room not found"));
-        }
-
-        res.status(200).json({ message: "Room deleted successfully" });
-
-    } catch (error) {
-
-        return next(createError(500, "Cannot delete conference room at the moment"));
-
+    if (!room) {
+      return next(createError(404, "Room doesn't exist"));
     }
 
+    res.status(200).json({ message: "Room deleted successfully" });
+  } catch (error) {
+    return next(
+      createError(500, "Cannot delete conference room at the moment")
+    );
+  }
 });
 
-router.get('/rooms/:id', async (req, res, next) => {
+router.get("/rooms/:roomId", async (req, res, next) => {
+  try {
+    const roomId = req.params.roomId;
+    console.log(roomId);
+    const room = await Room.findOne({roomId: roomId});
 
-    try {
-
-        const roomId = req.params.id;
-        const room = await VideoCall.findById(roomId);
-
-        if (!room) {
-            return next(createError(404, "Room not found"));
-        }
-
-        res.status(200).json({ message: "Room retrieved successfully", room });
-
-    } catch (error) {
-
-        return next(createError(500, "Cannot retrieve conference room at the moment"));
-
+    if (!room) {
+      return next(createError(404, "Room doesn't exist"));
     }
+
+    res.status(200).json({ message: "Room exists", room });
+  } catch (error) {
+    return next(
+      createError(500, "Cannot retrieve conference room at the moment")
+    );
+  }
 });
 
 module.exports = router;
