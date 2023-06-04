@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors({
-    origin: "http://localhost:3000", // <-- the react app
+    origin: "*", // <-- the react app
     credentials: true,
 }));
 

@@ -20,6 +20,7 @@ router.post("/rooms", async (req, res, next) => {
         message: "Room created successfully",
       });
   } catch (error) {
+    console.log(error);
     return next(
       createError(500, "Cannot create a room at the moment")
     );
@@ -48,7 +49,6 @@ router.delete("/rooms/:roomId", async (req, res, next) => {
 router.get("/rooms/:roomId", async (req, res, next) => {
   try {
     const roomId = req.params.roomId;
-    console.log(roomId);
     const room = await Room.findOne({roomId: roomId});
 
     if (!room) {
@@ -57,6 +57,7 @@ router.get("/rooms/:roomId", async (req, res, next) => {
 
     res.status(200).json({ message: "Room exists", room });
   } catch (error) {
+    console.log(error)
     return next(
       createError(500, "Cannot retrieve conference room at the moment")
     );
