@@ -12,8 +12,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 app.use(helmet());
+<<<<<<< HEAD
 app.use(
   cors({
+=======
+app.use(cors({
+>>>>>>> 1b32db30ebad22545e68ee2378f9d4e4486cd422
     origin: "*", // <-- the react app
     credentials: true,
   })

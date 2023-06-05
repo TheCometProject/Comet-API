@@ -1,15 +1,18 @@
 
-if (`${process.env.NODE_ENV}` !== 'production') require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
 
 const app = require('./app');
 const mongoose = require('mongoose');
 
 const connect = async () => {
+<<<<<<< HEAD
     console.log(process.env.MONGODB_URI);
     await mongoose.connect(`${process.env.MONGODB_URI}`, { useNewUrlParser: true, useUnifiedTopology: true });
+=======
+    await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+>>>>>>> 1b32db30ebad22545e68ee2378f9d4e4486cd422
     console.log("Connected to MongoDB");
-
 }
 
 const port = process.env.PORT || 4000;
