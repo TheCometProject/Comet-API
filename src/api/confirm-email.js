@@ -1,26 +1,23 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const User = require('../models/user');
+const User = require("../models/user");
 const { createError } = require("../utils/error");
 
+router.get("/confirm-email/:confirmationToken", async (req, res, next) => {
+  const { confirmationToken } = req.params;
 
-router.get('/confirm-email/:confirmationToken', async (req, res, next) => {
+  // find user with matching confirmation token
+  const user = await User.findOne({ confirmationToken: confirmationToken });
 
-    const { confirmationToken } = req.params;
+  if (!user) {
+    return next(createError(400, "Invalid confirmation token"));
+  }
 
-    // find user with matching confirmation token
-    const user = await User.findOne({ confirmationToken: confirmationToken });
+  user.confirmationToken = undefined;
+  user.isEmailConfirmed = true;
+  await user.save();
 
-    if (!user) {
-        return next(createError(400, "Invalid confirmation token"));
-    }
-
-    user.confirmationToken = undefined;
-    user.isEmailConfirmed = true;
-    await user.save();
-
-    res.status(200).send('Email confirmed successfully');
-
+  res.status(200).send("Email confirmed successfully");
 });
 
 module.exports = router;

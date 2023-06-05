@@ -4,28 +4,26 @@ const router = express.Router();
 const passport = require("passport");
 const { createError } = require("../utils/error");
 
-
-router.post("/logout", passport.authenticate("jwt", { session: false }), async (req, res, next) => {
-
+router.post(
+  "/logout",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res, next) => {
     try {
+      // Find the user in the database
+      const user = await User.findById(req.user.id);
+      if (!user) {
+        return next(createError(400, "User not found"));
+      }
 
-        // Find the user in the database
-        const user = await User.findById(req.user.id);
-        if (!user) {
-            return next(createError(400, "User not found"));
-        }
+      // Delete the refresh token from the database
+      user.refreshToken = undefined;
+      await user.save();
 
-        // Delete the refresh token from the database
-        user.refreshToken = undefined;
-        await user.save();
-
-        res.status(200).json({ message: "Logout successful" });
-
+      res.status(200).json({ message: "Logout successful" });
     } catch (error) {
-
-        return next(createError(500, "Internal server Error"));
-
+      return next(createError(500, "Internal server Error"));
     }
-});
+  }
+);
 
 module.exports = router;

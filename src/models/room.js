@@ -16,6 +16,11 @@ const roomSchema = new mongoose.Schema({
     unique: true,
   },
 
+  roomTitle: {
+    type: String,
+    required:true,
+  },
+
   isActive: {
     type: Boolean,
     default: false,

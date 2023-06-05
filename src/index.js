@@ -6,7 +6,7 @@ const app = require('./app');
 const mongoose = require('mongoose');
 
 const connect = async () => {
-
+    console.log(process.env.MONGODB_URI);
     await mongoose.connect(`${process.env.MONGODB_URI}`, { useNewUrlParser: true, useUnifiedTopology: true });
     console.log("Connected to MongoDB");
 
