@@ -67,6 +67,7 @@ router.post(
         message: "Thank you for your registration!",
         fullName: newUser.fullName,
         email: newUser.email,
+        profilePic: newUser.profilePic,
         accessToken,
         refreshToken,
       });

@@ -44,6 +44,7 @@ router.post("/login", limiter, async (req, res, next) => {
       message: "Welcome Back!",
       fullName: user.fullName,
       email: user.email,
+      profilePic: user.profilePic,
       accessToken,
       refreshToken,
     });
