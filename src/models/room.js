@@ -1,6 +1,6 @@
-import { Schema, model } from "mongoose";
+const mongoose = require("mongoose");
 
-const roomSchema = new Schema({
+const roomSchema = new mongoose.Schema({
   roomId: {
     type: String,
     required: true,
@@ -8,7 +8,7 @@ const roomSchema = new Schema({
   },
   roomTitle: {
     type: String,
-    required:true,
+    required: true,
   },
   createdAt: {
     type: Date,
@@ -16,6 +16,6 @@ const roomSchema = new Schema({
   },
 });
 
-const Room = model("Room", roomSchema);
+const Room = mongoose.model("Room", roomSchema);
 
-export default Room;
+module.exports = Room;
