@@ -6,6 +6,10 @@ const roomSchema = new Schema({
     required: true,
     unique: true,
   },
+  roomTitle: {
+    type: String,
+    required:true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
