@@ -70,6 +70,7 @@ router.post(
         profilePic: newUser.profilePic,
         accessToken,
         refreshToken,
+        profilePic: newUser.profilePic,
       });
     } catch (error) {
       return next(createError(500, "Cannot register user at the moment"));

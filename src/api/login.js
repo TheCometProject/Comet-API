@@ -47,6 +47,7 @@ router.post("/login", limiter, async (req, res, next) => {
       profilePic: user.profilePic,
       accessToken,
       refreshToken,
+      profilePic: user.profilePic,
     });
   } catch (err) {
     return next(createError(500, "Server Error"));
