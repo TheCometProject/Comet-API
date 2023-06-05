@@ -1,35 +1,17 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const roomSchema = new mongoose.Schema({
-  // participants: [{
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: 'User',
-  //     required: true
-  // }],
-  author: {
-    type: String,
-    required: true,
-  },
+const roomSchema = new Schema({
   roomId: {
     type: String,
     required: true,
     unique: true,
   },
-
-  isActive: {
-    type: Boolean,
-    default: false,
-  },
   createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-const Room = mongoose.model("Room", roomSchema);
+const Room = model("Room", roomSchema);
 
-module.exports = Room;
+export default Room;
